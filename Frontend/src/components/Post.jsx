@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsis, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
 import profilePic from '../assets/profile Pic.jpeg'
@@ -13,6 +14,7 @@ function Post() {
     const { user, url } = useContext(AuthContext);
     const [caption, setCaption] = useState('');
     const [comment, setComment] = useState('');
+
     useEffect(() => {
         fetchPosts();
     }, []);
@@ -69,7 +71,6 @@ function Post() {
         const userId = localStorage.getItem('user-id');
         try {
             const response = await axios.patch(`${url}posts/like`, { postId, userId });
-            console.log(response);
             fetchPosts()
         } catch (error) {
             console.error(error);
@@ -80,8 +81,7 @@ function Post() {
         if (comment) {
             try {
                 const response = await axios.patch(`${url}posts/comment`, { postId, userId, comment });
-                console.log(response);
-                setCaption('');
+                setComment('');
                 fetchPosts()
             } catch (error) {
                 console.error(error);
@@ -97,7 +97,7 @@ function Post() {
             <div className='bg-white rounded-lg p-4 h-32 border-2 border-neutral-300'>
                 <div className='flex gap-4 items-center'>
                     <img className='w-14 h-14 rounded-full' src={profilePic} alt='' />
-                    <span onClick={() => document.getElementById('my_modal_2').showModal()} className='border border-black rounded-full w-full p-3'>Start a post</span>
+                    <span onClick={() => document.getElementById('my_modal_2').showModal()} className='border border-black rounded-full w-full p-3 cursor-pointer'>Start a post</span>
 
                     <dialog id='my_modal_2' className='modal'>
                         <div className='modal-box'>
@@ -141,9 +141,11 @@ function Post() {
                             <div className='bg-white rounded-lg p-4 border-2 border-neutral-300 mt-2'>
                                 <div className='flex justify-between'>
                                     <div className='flex gap-4 items-center'>
-                                        <img className='w-14 h-14 rounded-full' src={profilePic} alt='' />
+                                        <Link to={'/user-profile'}>
+                                            <img className='w-14 h-14 rounded-full' src={profilePic} alt='' />
+                                        </Link>
                                         <div>
-                                            <p className='text-sm text-neutral-500'>{`${user.firstName} ${user.lastName}`} . Following</p>
+                                            <p className='text-sm text-neutral-500'>{`${post.author.firstName} ${post.author.lastName}`} . Following</p>
                                             <p className='text-sm'>10:30 AM</p>
                                         </div>
                                     </div>
@@ -218,7 +220,7 @@ function Post() {
                                                     )}
                                             </div>
                                             <div>
-                                                <input type="text" onChange={(e) => setComment(e.target.value)} value={comment} />
+                                                <input placeholder='Write a comment...' className='outline-none my-2 w-full' type="text" onChange={(e) => setComment(e.target.value)} value={comment} />
                                             </div>
                                             <div className="modal-action ">
                                                 <button className='btn' onClick={() => onCommentHandler(post._id)}>Save</button>

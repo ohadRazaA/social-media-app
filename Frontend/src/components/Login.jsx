@@ -25,8 +25,7 @@ function Login() {
     const onLogin = async () => {
         if (email && password) {
             try {
-                const response = await axios.post(`${url}auth-users/`, { email, userPassword: password });
-                console.log(response)
+                const response = await axios.post(`${url}users/auth-users/`, { email, userPassword: password });
                 setIsLoggedin(true);
                 localStorage.setItem('user-id', response.data.userId);
                 fetchUser(response.data.userId);

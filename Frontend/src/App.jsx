@@ -4,6 +4,8 @@ import Signup from './components/Signup'
 import Login from './components/Login'
 import Home from './components/Home'
 import PostProvider from './context/PostContext'
+import UserProfile from './components/UserProfile'
+import Profile from './components/Profile'
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
       <PostProvider>
         <Routes>
           <Route path='/' element={<Home />} />
+          <Route path='/user-profile' element={<UserProfile />} />
+          <Route path='/profile' element={<Profile />} />
         </Routes>
       </PostProvider>
       <Routes>
@@ -22,3 +26,4 @@ function App() {
 }
 
 export default App
+

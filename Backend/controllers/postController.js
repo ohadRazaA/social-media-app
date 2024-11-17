@@ -1,4 +1,5 @@
 const PostModel = require('../models/postModel');
+const UserModel = require('../models/userModel');
 const mongoose = require('mongoose');
 
 const createPost = async (req, res) => {
@@ -10,18 +11,23 @@ const createPost = async (req, res) => {
     });
     try {
         const post = await newPost.save();
-        res.status(200).json({ message: 'post added successfully', post });
+        const userFound = await UserModel.findByIdAndUpdate(
+            author,
+            { $push: { posts: post._id } },
+            { new: true }
+        );
+        res.status(200).json({ message: 'post added successfully', post, userFound });
     }
     catch (err) {
-        res.status(401).json({ message: 'Try again later' });
+        res.status(401).json({ message: err });
     }
 }
-
 const fetchPosts = async (req, res) => {
     try {
         const postsFound = await PostModel.find().sort({ createdAt: -1 }).populate('author');
-        // const posts = postsFound.filter(post => post.author._id.toString() === req.params.userId);
-        res.status(200).json(postsFound);
+        const userPosts = postsFound.filter(post => post.author._id.toString() === req.params.userId);
+        const friendsPosts = postsFound.filter(post => !userPosts.includes(post));
+        res.status(200).json(friendsPosts);
     } catch (err) {
         res.status(401).send('try again later');
     }
@@ -59,10 +65,8 @@ const likePost = async (req, res) => {
         const likedIndex = post.likes.findIndex(like => like.toString() === userId);
         if (likedIndex !== -1) {
             post.likes.splice(likedIndex, 1);
-            post.isLiked = false;
         } else {
             post.likes.push(userId);
-            post.isLiked = true;
         }
         await post.save();
         res.status(200).json({ post });

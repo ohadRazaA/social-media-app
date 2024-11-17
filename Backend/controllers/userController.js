@@ -1,5 +1,5 @@
 const UserModel = require('../models/userModel');
-const mongoose = require('mongoose');
+const PostModel = require('../models/postModel');
 const bcrypt = require('bcrypt')
 
 const createUser = async (req, res) => {
@@ -37,16 +37,40 @@ const authUser = async (req, res) => {
     });
 }
 const getUser = async (req, res) => {
+    const allUsers = await UserModel.find()
+    // .populate('posts');
     const userFound = await UserModel.findById(req.params.id);
     if (!userFound) {
         return res.status(404).send('User not found');
     }
-    res.status(200).send(userFound);
+    let recommendations = allUsers.sort(() => Math.random() - 0.5).slice(0, 4);
+    const recommendedUser = recommendations.filter(u => u._id.toString() !== userFound._id.toString());
+    const posts = await PostModel.find({ author: userFound._id });
+    userFound.posts = posts;
+    res.status(200).json({ userFound, recommendedUser, allUsers });
 }
+
+const addUsersFriend = async (req, res) => {
+    const { friendId, userId } = req.body;
+    try {
+        const user = await UserModel.findById(userId);
+        const addFriendIndex = user.friends.findIndex(friend => friend.toString() === friendId);
+        if (addFriendIndex !== -1) {
+            user.friends.splice(addFriendIndex, 1);
+        } else {
+            user.friends.push(friendId);
+        }
+        await user.save();
+        res.status(200).json({ user });
+    } catch (err) {
+        res.status(500).json({ message: err });
+    }
+};
 
 
 module.exports = {
     createUser,
     authUser,
-    getUser
+    getUser,
+    addUsersFriend,
 }

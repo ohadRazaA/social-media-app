@@ -7,7 +7,9 @@ export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
     const [isLoggedin, setIsLoggedin] = useState(false);
-    const [user, setUser] = useState([]);
+    const [user, setUser] = useState({});
+    const [allUser, setAllUser] = useState([]);
+    const [friendProfile, setFriendProfile] = useState({});
     const navigate = useNavigate();
     const url = 'http://localhost:5000/';
 
@@ -24,7 +26,8 @@ function AuthProvider({ children }) {
 
     const fetchUser = async (userId) => {
         const response = await axios.get(`${url}users/${userId}`);
-        setUser(response.data);
+        setUser(response.data.userFound);
+        setAllUser(response.data.allUsers)
     }
     return (
         <AuthContext.Provider value={{
@@ -33,7 +36,11 @@ function AuthProvider({ children }) {
             fetchUser,
             user,
             setUser,
-            url
+            url,
+            friendProfile,
+            setFriendProfile,
+            allUser,
+            setAllUser,
         }}>
             {children}
         </AuthContext.Provider>
