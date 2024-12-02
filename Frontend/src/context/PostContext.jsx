@@ -4,11 +4,14 @@ export const PostContext = createContext();
 
 function PostProvider({ children }) {
   const [allPosts, setAllPosts] = useState([]);
+  const [yourPosts, setYourPosts] = useState([]);
 
   return (
     <PostContext.Provider value={{
       allPosts,
-      setAllPosts
+      setAllPosts,
+      yourPosts,
+      setYourPosts
     }}>
       {children}
     </PostContext.Provider>

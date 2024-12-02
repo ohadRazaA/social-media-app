@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Navbar from './Navbar'
 import coverPic from '../assets/cover pic.jpg'
-import profilePic from '../assets/profile Pic.jpeg'
+import profilePic from '../assets/profile-pic.png'
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import Post from './Post'

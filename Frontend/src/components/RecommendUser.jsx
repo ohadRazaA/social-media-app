@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import profilePic from '../assets/Profile pic.jpeg'
+import profilePic from '../assets/profile-pic.png'
 
 function RecommendUser() {
     const { setIsLoggedin, url, user, fetchUser, setFriendProfile } = useContext(AuthContext);
@@ -40,7 +40,7 @@ function RecommendUser() {
             <p className='mb-3'>Add to your feed</p>
             <div>
                 {
-                    recommendations.map((u, i) => {
+                    recommendations?.map((u, i) => {
                         return (
                             <div key={i} className='flex gap-3 my-2'>
                                 <Link className='w-20' onClick={() => setFriendProfile(u)} to={'/profile'}>
@@ -51,7 +51,7 @@ function RecommendUser() {
                                         <h1 className='text-sm font-medium cursor-pointer'>{`${u.firstName} ${u.lastName}`}</h1>
                                     </Link>
                                     <p className='text-xs'>MERN Stack Developer | Web Developer | React Js</p>
-                                    <button onClick={() => addFriendHandler(u._id)} className='border-2 border-neutral-300 rounded-full p-1 my-1'>{user.friends.includes(u._id) ? "- un-friend" : "+ Add Friend"}</button>
+                                    <button onClick={() => addFriendHandler(u._id)} className='border-2 border-neutral-300 rounded-full p-1 my-1'>{user?.friends?.includes(u._id) ? "- un-friend" : "+ Add Friend"}</button>
                                 </div>
                             </div>
                         )

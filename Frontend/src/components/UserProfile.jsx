@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Navbar from './Navbar'
 import coverPic from '../assets/cover pic.jpg'
-import profilePic from '../assets/Profile pic.jpeg'
-import axios from 'axios';
+import profilePic from '../assets/profile-pic.png'
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import RecommendUser from './RecommendUser';

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import profilePic from '../assets/profile Pic.jpeg'
+import profilePic from '../assets/profile-pic.png'
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons'
@@ -18,16 +18,15 @@ function Navbar() {
   const handleSearch = (e) => {
     const query = e.target.value
     setSearchQuery(query);
+    const filtered = allUser.filter(item => item.firstName.toLowerCase().startsWith(query.toLowerCase()));
 
-    // const filtered = allUser.filter(item => item.firstName.toLowerCase().startsWith(query.toLowerCase()));
-
-    const filtered = allUser.filter(item => item.firstName.toLowerCase().includes(query.toLowerCase())).sort((a, b) => {
-      const startsWithQuery = (word) =>
-        word.firstName.toLowerCase().startsWith(query.toLowerCase());
-      if (startsWithQuery(a) && !startsWithQuery(b)) return -1;
-      if (!startsWithQuery(a) && startsWithQuery(b)) return 1;
-      return 0; // Preserve original order for non-prioritized matches
-    });
+    // const filtered = allUser.filter(item => item.firstName.toLowerCase().includes(query.toLowerCase())).sort((a, b) => {
+    //   const startsWithQuery = (word) =>
+    //     word.firstName.toLowerCase().startsWith(query.toLowerCase());
+    //   if (startsWithQuery(a) && !startsWithQuery(b)) return -1;
+    //   if (!startsWithQuery(a) && startsWithQuery(b)) return 1;
+    //   return 0; // Preserve original order for non-prioritized matches
+    // });
     setFilteredItems(filtered);
   };
 
@@ -60,20 +59,7 @@ function Navbar() {
           </div>
           <div></div>
           <div className='flex'>
-            <a className='btn btn-ghost text-xl'>daisyUI</a>
-            {/* <label className='hidden input input-bordered sm:flex items-center gap-2'>
-              <input type='text' className='grow' placeholder='Search' />
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                viewBox='0 0 16 16'
-                fill='currentColor'
-                className='h-4 w-4 opacity-70'>
-                <path
-                  fillRule='evenodd'
-                  d='M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z'
-                  clipRule='evenodd' />
-              </svg>
-            </label> */}
+            <a className='btn btn-ghost text-xl'>Social</a>
             <div className="relative">
               <input
                 type="text"
@@ -109,6 +95,7 @@ function Navbar() {
             <Link to={'/'} className='cursor-pointer'>Home</Link>
             <li className='cursor-pointer'>Messaging</li>
             <li className='cursor-pointer'>Notifications</li>
+            <Link to={'/user-posts'} className='cursor-pointer'>Your posts</Link>
             <div className='dropdown dropdown-end'>
               <div tabIndex={0} role='button' className='btn btn-ghost btn-circle avatar'>
                 <div className='w-10 rounded-full'>

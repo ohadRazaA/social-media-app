@@ -27,7 +27,7 @@ const fetchPosts = async (req, res) => {
         const postsFound = await PostModel.find().sort({ createdAt: -1 }).populate('author');
         const userPosts = postsFound.filter(post => post.author._id.toString() === req.params.userId);
         const friendsPosts = postsFound.filter(post => !userPosts.includes(post));
-        res.status(200).json(friendsPosts);
+        res.status(200).json({ friendsPosts, userPosts });
     } catch (err) {
         res.status(401).send('try again later');
     }
